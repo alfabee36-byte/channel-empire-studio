@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Video Generator Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#131b2f;--line:#26334d;--muted:#9aa8c2;--text:#f3f6ff;--accent:#8b7cff;--cyan:#4bd6ce}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0,#20204a 0,transparent 40%),var(--bg);color:var(--text);font:15px Inter,system-ui,Arial}
+header{padding:22px max(22px,calc((100% - 1160px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{font-size:19px;font-weight:800;letter-spacing:.2px}.brand span{color:var(--accent)}.pill{border:1px solid #315b60;color:var(--cyan);padding:7px 11px;border-radius:30px;font-size:12px}
+main{max-width:1160px;margin:38px auto;padding:0 22px}.hero{margin-bottom:25px}.eyebrow{color:var(--cyan);font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:700}h1{font-size:clamp(30px,5vw,48px);margin:10px 0}p{color:var(--muted);line-height:1.6}
+.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.panel{background:linear-gradient(160deg,#17213a,#11182a);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 18px 50px #0003}h2{font-size:18px;margin:0 0 20px}
+label{display:block;font-size:13px;color:#c5cde0;margin:16px 0 8px}input,select,textarea{width:100%;border:1px solid var(--line);background:#0b1222;color:var(--text);border-radius:10px;padding:12px;font:inherit}textarea{min-height:150px;resize:vertical}
+.upload{border:1px dashed #56618a;border-radius:13px;padding:20px;text-align:center;background:#0d1528}.upload input{border:0;padding:8px;background:transparent}.preview{max-width:100%;max-height:220px;border-radius:10px;margin-top:12px;display:none}
+button{width:100%;border:0;border-radius:11px;padding:14px;background:linear-gradient(90deg,#7767f7,#4e9ef6);color:white;font-weight:800;font-size:15px;margin-top:20px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}
+.status{margin-top:16px;padding:13px;border-radius:10px;background:#0b1222;color:var(--muted);font-size:13px;line-height:1.5}.bar{height:7px;background:#27334d;border-radius:10px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;width:0;background:var(--cyan);transition:width .3s}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.feature{border:1px solid var(--line);border-radius:12px;padding:13px}.feature b{display:block;margin-bottom:5px}.feature small{color:var(--muted)}
+a{color:var(--cyan)}.hint{font-size:12px;color:var(--muted)}.mode{display:flex;gap:10px;flex-wrap:wrap}.mode label{margin:0;border:1px solid var(--line);border-radius:10px;padding:11px;flex:1}.mode input{width:auto}
+@media(max-width:800px){.layout{grid-template-columns:1fr}header{padding:18px 20px}main{margin:25px auto}}
+</style></head>
+<body>
+<header><div class="brand">✦ AI VIDEO <span>STUDIO</span></div><div class="pill" id="health">Memeriksa sistem…</div></header>
+<main><section class="hero"><div class="eyebrow">CREATE • SPEAK • RENDER</div><h1>Ubah foto menjadi video.</h1><p>Unggah foto, tulis naskah, pilih bahasa dan suara. Buat video presenter untuk konten YouTube, edukasi, dan media sosial.</p></section>
+<div class="layout">
+<section class="panel"><h2>01 / Pengaturan video</h2><form id="form">
+<label>Foto presenter (JPG / PNG / WEBP)</label><div class="upload">Pilih foto wajah yang jelas<input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required><img id="preview" class="preview"></div>
+<label>Script / naskah</label><textarea name="script" id="script" maxlength="5000" placeholder="Halo! Selamat datang di channel kami. Hari ini kita akan membahas..." required></textarea><div class="hint"><span id="count">0</span>/5000 karakter</div>
+<label>Language / Bahasa</label><select id="language"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select>
+<label>Voice / Suara</label><select id="voice"></select>
+<label>Mode video</label><div class="mode"><label><input type="radio" name="mode" value="narrated" checked> Narrated portrait <div class="hint">Foto + suara (tanpa gerak bibir)</div></label><label><input type="radio" name="mode" value="talking"> Talking photo <div class="hint">Lip-sync SadTalker (perlu setup GPU/model)</div></label></div>
+<button id="submit" type="submit">✦ Generate video</button></form>
+<div class="status" id="status">Siap membuat video. Hasil default berupa foto dengan narasi suara.</div><div class="bar"><i id="progress"></i></div><div id="download"></div>
+</section>
+<aside class="panel"><h2>02 / Studio capabilities</h2><p>Studio bilingual dengan pipeline lokal untuk pembuatan audio dan rendering MP4.</p>
+<div class="features"><div class="feature">🖼️ <b>Photo upload</b><small>Foto presenter milikmu</small></div><div class="feature">🗣️ <b>AI voice</b><small>Suara Indonesia & English</small></div><div class="feature">🎞️ <b>MP4 render</b><small>FFmpeg video output</small></div><div class="feature">👄 <b>Lip-sync option</b><small>Integrasi SadTalker opsional</small></div><div class="feature">🌐 <b>Bilingual</b><small>Bahasa Indonesia / English</small></div><div class="feature">🔒 <b>Local files</b><small>File disimpan di workspace</small></div></div>
+<div class="status" style="margin-top:20px"><b>Catatan penting</b><br>Tanpa SadTalker dan checkpoint model, aplikasi tidak menggerakkan bibir. Gunakan mode Narrated Portrait untuk membuat MP4 yang langsung berfungsi. Jangan unggah foto orang tanpa izin.</div>
+</aside></div></main>
+<script>
+const voices={id:[["id-ID-ArdiNeural","Ardi • Pria"],["id-ID-GadisNeural","Gadis • Wanita"]],en:[["en-US-GuyNeural","Guy • Male"],["en-US-JennyNeural","Jenny • Female"]]};
+const language=document.querySelector("#language"),voice=document.querySelector("#voice");
+function updateVoices(){voice.innerHTML=voices[language.value].map(v=>'<option value="'+v[0]+'">'+v[1]+'</option>').join("")}
+language.addEventListener("change",updateVoices);updateVoices();
+const photo=document.querySelector("#photo"),preview=document.querySelector("#preview");
+photo.addEventListener("change",()=>{const f=photo.files[0];if(!f)return;preview.src=URL.createObjectURL(f);preview.style.display="block"});
+const script=document.querySelector("#script");script.addEventListener("input",()=>document.querySelector("#count").textContent=script.value.length);
+fetch("/api/health").then(r=>r.json()).then(h=>{document.querySelector("#health").textContent=h.ffmpeg?"● FFmpeg ready":"FFmpeg missing";}).catch(()=>document.querySelector("#health").textContent="API offline");
+const form=document.querySelector("#form"),button=document.querySelector("#submit"),statusBox=document.querySelector("#status"),progress=document.querySelector("#progress"),download=document.querySelector("#download");
+form.addEventListener("submit",async e=>{e.preventDefault();if(!photo.files[0])return;button.disabled=true;download.innerHTML="";progress.style.width="3%";statusBox.textContent="Mengirim pekerjaan...";const data=new FormData();data.append("photo",photo.files[0]);data.append("script",script.value);data.append("language",language.value);data.append("voice",voice.value);data.append("avatar_mode",document.querySelector('input[name="mode"]:checked').value);
+try{const response=await fetch("/api/generate",{method:"POST",body:data});const result=await response.json();if(!response.ok)throw new Error(result.detail||"Gagal memulai proses");const id=result.job_id;
+const poll=async()=>{const r=await fetch("/api/jobs/"+id);const j=await r.json();statusBox.textContent=j.message||j.status;progress.style.width=(j.progress||0)+"%";if(j.status==="completed"){download.innerHTML='<p>✓ Video selesai. <a href="/api/jobs/'+id+'/download">Download MP4</a></p>';button.disabled=false;return}if(j.status==="failed"){throw new Error(j.message)}setTimeout(poll,1800)};await poll();
+}catch(err){statusBox.textContent="Error: "+err.message;button.disabled=false;progress.style.width="0%"}});
+</script></body></html>
